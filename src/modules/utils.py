@@ -40,7 +40,7 @@ class Utilities:
         Handles and display uploaded_file
         :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt"]
         """
-        uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
+        uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed", accept_multiple_files=True)
         if uploaded_file is not None:
 
             def show_csv_file(uploaded_file):
@@ -66,15 +66,15 @@ class Utilities:
             def get_file_extension(uploaded_file):
                 return os.path.splitext(uploaded_file)[1].lower()
             
-            file_extension = get_file_extension(uploaded_file.name)
+            # file_extension = get_file_extension([x for file in uploaded_file.name])
 
-            # Show the contents of the file based on its extension
-            #if file_extension == ".csv" :
-            #    show_csv_file(uploaded_file)
-            if file_extension== ".pdf" : 
-                show_pdf_file(uploaded_file)
-            elif file_extension== ".txt" : 
-                show_txt_file(uploaded_file)
+            # # Show the contents of the file based on its extension
+            # #if file_extension == ".csv" :
+            # #    show_csv_file(uploaded_file)
+            # if file_extension== ".pdf" : 
+            #     show_pdf_file(uploaded_file)
+            # elif file_extension== ".txt" : 
+            #     show_txt_file(uploaded_file)
 
         else:
             st.session_state["reset_chat"] = True
@@ -101,5 +101,16 @@ class Utilities:
 
         return chatbot
 
+    @staticmethod
+    def file_selector(folder_path):
 
+
+        files = [file for file in os.listdir(folder_path) if not file.startswith('.')] # Ignore hidden files 
+        all_data = pd.DataFrame()
+
+        for file in files:
+            current_data = pd.read_csv(folder_path+ "/"+file, index_col=None)
+            all_data = pd.concat([all_data, current_data])
+
+        return all_data
     

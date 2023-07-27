@@ -2,13 +2,13 @@ import streamlit as st
 
 class Layout:
     
-    def show_header(self, types_files):
+    def show_header(self):
         """
         Displays the header of the app
         """
         st.markdown(
             f"""
-            <h1 style='text-align: center;'> Ask Robby about your {types_files} files ! 😁</h1>
+            <h1 style='text-align: center;'> Ask Sam about the house of your dreams ! 😁</h1>
             """,
             unsafe_allow_html=True,
         )

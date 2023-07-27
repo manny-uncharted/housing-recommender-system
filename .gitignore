@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+src/pages/3_🎬 Sam-Youtube.py
+src/pages/2_📊 Sam-Sheet (beta).py
+2_📊 Sam-Sheet (beta).py
+3_🎬 Sam-Youtube.py
+2_📊 Robby-Sheet (beta).py
+3_🎬 Robby-Youtube.py
+2_📊 Robby-Sheet (beta).py
 # Distribution / packaging
 .Python
 build/
