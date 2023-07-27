@@ -7,6 +7,7 @@ from modules.history import ChatHistory
 from modules.layout import Layout
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
+from pathlib import Path
 
 #To be able to update the changes made to modules in localhost (press r)
 def reload_module(module_name):
@@ -41,6 +42,12 @@ else:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
     uploaded_file = utils.handle_upload(["pdf", "txt", "csv"])
+    # folder_location = Path(__file__).resolve().parent
+    # data_directory = Path(folder_location.parent, "data")
+    # file_path = os.path.abspath(data_directory)
+    # print(file_path)
+    # print(data_dir.exists())
+    # uploaded_filedir = utils.file_selector(file_path)
 
     if uploaded_file:
 
