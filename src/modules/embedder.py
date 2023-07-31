@@ -41,23 +41,26 @@ class Embedder:
                 length_function = len,
             )
         
-        file_extension = get_file_extension(original_filename)
+        # file_extension = get_file_extension(original_filename)
+        # data = None
+        # if file_extension == ".csv":
+        #     loader = CSVLoader(file_path=tmp_file_path, encoding="utf-8",csv_args={
+        #         'delimiter': ',',})
+        #     data = loader.load()
 
-        if file_extension == ".csv":
-            loader = CSVLoader(file_path=tmp_file_path, encoding="utf-8",csv_args={
-                'delimiter': ',',})
-            data = loader.load()
-
-        elif file_extension == ".pdf":
-            loader = PyPDFLoader(file_path=tmp_file_path)  
-            data = loader.load_and_split(text_splitter)
+        # elif file_extension == ".pdf":
+        #     loader = PyPDFLoader(file_path=tmp_file_path)  
+        #     data = loader.load_and_split(text_splitter)
         
-        elif file_extension == ".txt":
-            loader = TextLoader(file_path=tmp_file_path, encoding="utf-8")
-            data = loader.load_and_split(text_splitter)
+        # elif file_extension == ".txt":
+        #     loader = TextLoader(file_path=tmp_file_path, encoding="utf-8")
+        #     data = loader.load_and_split(text_splitter)
+        loader = TextLoader(file_path=tmp_file_path, encoding="utf-8")
+        data = loader.load_and_split(text_splitter)
             
-        # embeddings = OpenAIEmbeddings()
-        embeddings = FakeEmbeddings(size=4000)
+            
+        embeddings = OpenAIEmbeddings()
+        # embeddings = FakeEmbeddings(size=4000)
 
         vectors = FAISS.from_documents(data, embeddings)
         os.remove(tmp_file_path)

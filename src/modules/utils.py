@@ -1,11 +1,19 @@
 import os
+import io
 import pandas as pd
 import streamlit as st
 import pdfplumber
-from pathlib import Path
+import pathlib
+from dotenv import load_dotenv
 
 from modules.chatbot import Chatbot
 from modules.embedder import Embedder
+
+BASE_DIR = pathlib.Path().resolve()
+folder_path = BASE_DIR / 'data'
+DATA_PATH = folder_path / 'properties.txt'
+
+load_dotenv()
 
 class Utilities:
 
@@ -41,33 +49,35 @@ class Utilities:
         Handles and display uploaded_file
         :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt"]
         """
-        uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
+        uploaded_file = pathlib.Path(DATA_PATH)
+        
+        # uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
         if uploaded_file is not None:
-
             def show_csv_file(uploaded_file):
-                file_container = st.expander("Your CSV file :")
-                uploaded_file.seek(0)
-                shows = pd.read_csv(uploaded_file)
+                file_container = st.expander("Your CSV file:")
+                with open(uploaded_file, "r") as file:
+                    file.seek(0)
+                    shows = pd.read_csv(file)
                 file_container.write(shows)
 
             def show_pdf_file(uploaded_file):
-                file_container = st.expander("Your PDF file :")
-                with pdfplumber.open(uploaded_file) as pdf:
-                    pdf_text = ""
-                    for page in pdf.pages:
-                        pdf_text += page.extract_text() + "\n\n"
+                file_container = st.expander("Your PDF file:")
+                with open(uploaded_file, "rb") as file:
+                    with pdfplumber.open(file) as pdf:
+                        pdf_text = ""
+                        for page in pdf.pages:
+                            pdf_text += page.extract_text() + "\n\n"
                 file_container.write(pdf_text)
-            
+
             def show_txt_file(uploaded_file):
                 file_container = st.expander("Your TXT file:")
-                uploaded_file.seek(0)
-                content = uploaded_file.read().decode("utf-8")
+                with open(uploaded_file, "r") as file:
+                    file.seek(0)
+                    content = file.read()
                 file_container.write(content)
-            
-            def get_file_extension(uploaded_file):
-                return os.path.splitext(uploaded_file)[1].lower()
-            
-            file_extension = get_file_extension(uploaded_file.name)
+
+                       
+            file_extension = get_file_extension(uploaded_file)
 
             # Show the contents of the file based on its extension
             #if file_extension == ".csv" :
@@ -90,11 +100,15 @@ class Utilities:
         """
         embeds = Embedder()
 
-        with st.spinner("Processing..."):
-            uploaded_file.seek(0)
-            file = uploaded_file.read()
+        with st.spinner("Processing...") and open(uploaded_file, "rb") as file:
+            # with open(uploaded_file, "r") as file:
+            file.seek(0)
+            file_contents = file.read()
+            # print(file_contents)
+            file_name = get_file_extension(uploaded_file)
             # Get the document embeddings for the uploaded file
-            vectors = embeds.getDocEmbeds(file, uploaded_file.name)
+            vectors = embeds.getDocEmbeds(file_contents, file_name)
+            print(vectors)
 
             # Create a Chatbot instance with the specified model and temperature
             chatbot = Chatbot(model, temperature,vectors)
@@ -102,21 +116,8 @@ class Utilities:
 
         return chatbot
 
-    @staticmethod
-    def file_selector(folder_path):
-        path = Path(folder_path)
-        # files = [file for file in os.listdir(folder_path) if not file.startswith('.')] # Ignore hidden files 
-        files = [file for file in os.listdir(folder_path) if not file.startswith('.')]
-        # print(files)
-        # all_data = pd.DataFrame()
-        my_dfs = []
-        for file in files:
-            file_loc = path / file
-            # print(file_loc)
-            current_data = pd.read_csv(file_loc)
-            print(current_data)
-            my_dfs.append(current_data)
-        all_data = pd.concat(my_dfs)
-
-        return all_data
     
+
+def get_file_extension(uploaded_file):
+    file_ext = os.path.splitext(uploaded_file)[0].lower()
+    return file_ext.split("/")[-1]

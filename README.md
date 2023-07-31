@@ -1,8 +1,6 @@
 # Sam your housing recommender chatbot 🤖
 
 
-#### For better understanding, see my medium article 🖖 : [Build a chat-bot over your CSV data](https://medium.com/@yvann-hub/build-a-chatbot-on-your-csv-data-with-langchain-and-openai-ed121f85f0cd)
-
 ## Quick Start 🚀
 
 

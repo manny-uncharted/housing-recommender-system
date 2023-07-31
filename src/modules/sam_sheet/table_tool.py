@@ -41,7 +41,7 @@ class PandasAgent :
             plt.tight_layout()
             buf = BytesIO()
             fig.savefig(buf, format="png")
-            buf.seek(0)
+            # buf.seek(0)
             st.image(buf, caption="Generated Plot")
         
         sys.stdout = old_stdout
