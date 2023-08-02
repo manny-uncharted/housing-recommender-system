@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-streamlit run src/Home.py
+/opt/venv/bin/python -m streamlit run src/Home.py
