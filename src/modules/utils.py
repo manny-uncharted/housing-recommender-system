@@ -5,6 +5,8 @@ import streamlit as st
 import pdfplumber
 import pathlib
 from dotenv import load_dotenv
+import smtplib
+from email.mime.text import MIMEText
 
 from modules.chatbot import Chatbot
 from modules.embedder import Embedder
@@ -14,6 +16,9 @@ folder_path = BASE_DIR / 'data'
 DATA_PATH = folder_path / 'properties.txt'
 
 load_dotenv()
+
+
+
 
 class Utilities:
 
@@ -121,3 +126,14 @@ class Utilities:
 def get_file_extension(uploaded_file):
     file_ext = os.path.splitext(uploaded_file)[0].lower()
     return file_ext.split("/")[-1]
+
+def send_email(subject, body, sender, recipients, password):
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = ','.join(recipients)
+    receiver = [str(sender), str(recipients)]
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+        smtp_server.login(sender, password)
+        smtp_server.sendmail(sender, receiver, msg.as_string())
+    print("Message sent!")
