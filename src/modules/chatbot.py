@@ -10,23 +10,12 @@ langchain.verbose = False
 
 class Chatbot:
 
-    def __init__(self, model_name, temperature, vectors):
+    def __init__(self, model_name, temperature, vectors, qa_template):
         self.model_name = model_name
         self.temperature = temperature
         self.vectors = vectors
 
-        self.qa_template = """
-           As AI assistant Sam, your aim is to recommend properties and estimate prices based on the given context and user descriptions. I will provide responses in complete sentences and aim for around 99% accuracy. However, please note that my answers are estimates and not guaranteed to be exact.
-
-            Please adhere to the following guidelines:
-
-            Provide the context in the given format.
-            ======
-            context: {context}
-            ======
-            question: {question}
-            Let's proceed with your property-related inquiries or seek suggestions. Feel free to ask any questions!
-            """
+        self.qa_template = qa_template
 
         self.QA_PROMPT = PromptTemplate(
             template=self.qa_template, 

@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from modules.sidebar import Sidebar
 from modules.layout import Layout
 from modules.utils import Utilities
-from modules.utils import send_email
+from modules.utils import send_emails
 
 load_dotenv()
 
@@ -25,8 +25,8 @@ with st.form("form1", clear_on_submit=True):
     message = st.text_area("Give your feedback on the chatbot")
 
     submit = st.form_submit_button("Submit this form")
-
+    receipients = [email, sender]
     if submit:
-        send_email(subject, message, sender=sender, recipients=email, password=password)
+        send_emails(email_list=receipients , body_content=message, subject=subject, email_from=sender, pswd=password)
         st.success("Thank you for your feedback")
         

@@ -6,7 +6,11 @@ import pdfplumber
 import pathlib
 from dotenv import load_dotenv
 import smtplib
+from typing import List, Optional
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 
 from modules.chatbot import Chatbot
 from modules.embedder import Embedder
@@ -99,7 +103,7 @@ class Utilities:
         return uploaded_file
 
     @staticmethod
-    def setup_chatbot(uploaded_file, model, temperature):
+    def setup_chatbot(uploaded_file, model, temperature, template):
         """
         Sets up the chatbot with the uploaded file, model, and temperature
         """
@@ -115,8 +119,10 @@ class Utilities:
             vectors = embeds.getDocEmbeds(file_contents, file_name)
             print(vectors)
 
+            qa_template = template
+
             # Create a Chatbot instance with the specified model and temperature
-            chatbot = Chatbot(model, temperature,vectors)
+            chatbot = Chatbot(model, temperature, vectors, qa_template=qa_template)
         st.session_state["ready"] = True
 
         return chatbot
@@ -127,13 +133,45 @@ def get_file_extension(uploaded_file):
     file_ext = os.path.splitext(uploaded_file)[0].lower()
     return file_ext.split("/")[-1]
 
-def send_email(subject, body, sender, recipients, password):
-    msg = MIMEText(body)
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = ','.join(recipients)
-    receiver = [str(sender), str(recipients)]
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-        smtp_server.login(sender, password)
-        smtp_server.sendmail(sender, receiver, msg.as_string())
-    print("Message sent!")
+
+def send_emails(email_list, body_content, subject, email_from, pswd):
+
+    for person in email_list:
+
+        # Make the body of the email
+        body = f"""
+        Dear {person},\n \n 
+        Thank you for submitting your suggestions to us. We would follow up on your comments and make prompt improvements. \n \n ,
+        {body_content}
+        """
+
+        # make a MIME object to define parts of the email
+        msg = MIMEMultipart()
+        msg['From'] = email_from
+        msg['To'] = person
+        msg['Subject'] = subject
+
+        # Attach the body of the message
+        msg.attach(MIMEText(body, 'plain'))
+        smtp_port = 587                 # Standard secure SMTP port
+        smtp_server = "smtp.gmail.com"  # Google SMTP Server
+
+        # Cast as string
+        text = msg.as_string()
+        # Connect with the server
+        print("Connecting to server...")
+        TIE_server = smtplib.SMTP(smtp_server, smtp_port)
+        TIE_server.starttls()
+        TIE_server.login(email_from, pswd)
+        print("Succesfully connected to server")
+        print()
+
+
+        # Send emails to "person" as list is iterated
+        print(f"Sending email to: {person}...")
+        TIE_server.sendmail(email_from, person, text)
+        print(f"Email sent to: {person}")
+        print()
+
+    # Close the port
+    TIE_server.quit()
