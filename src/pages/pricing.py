@@ -3,7 +3,7 @@ import streamlit as st
 from io import StringIO
 import re
 import sys
-from modules.history import ChatHistory
+from modules.pricing_hist import ChatHistory
 from modules.layout import Layout
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
@@ -17,12 +17,12 @@ def reload_module(module_name):
         importlib.reload(sys.modules[module_name])
     return sys.modules[module_name]
 
-history_module = reload_module('modules.history')
+history = reload_module('modules.pricing_hist')
 layout_module = reload_module('modules.layout')
 utils_module = reload_module('modules.utils')
 sidebar_module = reload_module('modules.sidebar')
 
-ChatHistory = history_module.ChatHistory
+ChatHistory = history.ChatHistory
 Layout = layout_module.Layout
 Utilities = utils_module.Utilities
 Sidebar = sidebar_module.Sidebar
@@ -50,10 +50,10 @@ else:
         sidebar.about()
 
         # Initialize chat history
-        history = ChatHistory()
+        history1 = ChatHistory()
         try:
             template = """
-                As AI assistant Sam, your aim is to recommend properties based on the given context and user descriptions. You have to provide responses in complete sentences and aim for around 99% accuracy. Do ensure to state that you don't understand when you can't guarantee 99% accuracy.
+                As AI assistant Sam, your task is to only determine property prices based on the description a user gives you. You are not expected to recommend any property. Only provide an estimate on what you think the property would cost per square meter and the rent per month cost. You have to provide responses in complete sentences and aim for around 99% accuracy. Ensure you give an estimate based on the information the user supplies and your knowledge of the property market and data accessible to you. Do ensure to state that you don't understand when you can't guarantee 99% accuracy.
 
                 Please adhere to the following guidelines:
 
@@ -77,16 +77,16 @@ else:
                     # Display the prompt form
                     is_ready, user_input = layout.prompt_form()
 
-                    # Initialize the chat history
-                    history.initialize(uploaded_file)
+                    # Initialize the chat history1
+                    history1.initialize(uploaded_file)
 
-                    # Reset the chat history if button clicked
+                    # Reset the chat history1 if button clicked
                     if st.session_state["reset_chat"]:
-                        history.reset(uploaded_file)
+                        history1.reset(uploaded_file)
 
                     if is_ready:
-                        # Update the chat history and display the chat messages
-                        history.append("user", user_input)
+                        # Update the chat history1 and display the chat messages
+                        history1.append("user1", user_input)
 
                         old_stdout = sys.stdout
                         sys.stdout = captured_output = StringIO()
@@ -95,7 +95,7 @@ else:
 
                         sys.stdout = old_stdout
 
-                        history.append("assistant", output)
+                        history1.append("assistant1", output)
 
                         # Clean up the agent's thoughts to remove unwanted characters
                         thoughts = captured_output.getvalue()
@@ -106,7 +106,7 @@ else:
                         with st.expander("Display the agent's thoughts"):
                             st.write(cleaned_thoughts)
 
-                history.generate_messages(response_container)
+                history1.generate_messages(response_container)
         except Exception as e:
             st.error(f"Error: {str(e)}")
 
