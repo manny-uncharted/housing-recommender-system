@@ -28,5 +28,4 @@ with st.form("form1", clear_on_submit=True):
     receipients = [email, sender]
     if submit:
         send_emails(email_list=receipients , body_content=message, subject=subject, email_from=sender, pswd=password)
-        st.success("Thank you for your feedback")
         
