@@ -10,13 +10,13 @@ from streamlit_lottie import st_lottie_spinner
 st.set_page_config(page_title = 'Rent Price Prediction', page_icon = ':bar_chart:', layout = 'wide')
 import json
 
-f = open('housing data\categories.json')
+f = open('housing_data\categories.json')
 categories = json.load(f)
 
 from catboost import CatBoostRegressor
 
 model = CatBoostRegressor()      # parameters not required.
-model.load_model('housing data\catboost_model')
+model.load_model('housing_data\catboost_model')
 
 def load_lottieurl(url: str):
     r = requests.get(url)
