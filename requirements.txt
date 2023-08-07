@@ -154,6 +154,7 @@ soupsieve==2.4.1
 SQLAlchemy==2.0.19
 stack-data==0.6.2
 streamlit
+streamlit-lottie
 streamlit-chat==0.0.2.2
 tenacity==8.2.2
 terminado==0.17.1
