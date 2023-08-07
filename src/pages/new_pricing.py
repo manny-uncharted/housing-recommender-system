@@ -4,19 +4,28 @@ from matplotlib import pyplot as plt
 from tqdm import tqdm 
 import requests
 import pickle
+import pathlib
 import streamlit as st 
 from streamlit_lottie import st_lottie
 from streamlit_lottie import st_lottie_spinner
 st.set_page_config(page_title = 'Rent Price Prediction', page_icon = ':bar_chart:', layout = 'wide')
 import json
 
-f = open('housing_data\categories.json')
+BASE_DIR = pathlib.Path().resolve()
+EXPORT_DIR = BASE_DIR / 'data'
+ALL_PROPERTIES_PATH = EXPORT_DIR / 'all_properties.txt'
+CATBOOST_MODEL_PATH = EXPORT_DIR / 'catboost_model'
+CATEGORIES_PATH = EXPORT_DIR / 'categories.json'
+MINI_PROPERTIES_PATH = EXPORT_DIR / 'mini_properties.txt'
+OPENRENT_PATH = EXPORT_DIR / 'openrent.txt'
+OUTPUT_PATH = EXPORT_DIR / 'output.txt'
+f = open(CATEGORIES_PATH)
 categories = json.load(f)
 
 from catboost import CatBoostRegressor
 
 model = CatBoostRegressor()      # parameters not required.
-model.load_model('housing_data\catboost_model')
+model.load_model(CATBOOST_MODEL_PATH)
 
 def load_lottieurl(url: str):
     r = requests.get(url)

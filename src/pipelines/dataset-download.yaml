@@ -5,7 +5,13 @@ steps:
       contextSetf:
         local_dest_dir: data/
         file_keys: [
-          "exports/data/properties.txt"
+          "exports/data/properties.txt",
+          "exports/data/catboost_model",
+          "exports/data/all_properties.txt",
+          "exports/data/categories.json",
+          "exports/data/mini_properties.txt",
+          "exports/data/openrent.txt",
+          "exports/data/output.txt",
 
         ]
   - name: pypyr.steps.py

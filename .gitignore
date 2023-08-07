@@ -136,6 +136,13 @@ venv.bak/
 
 # dataset
 /data
+housing_data/catboost_model
+housing_data/categories.json
+housing_data/mini properties.txt
+housing_data/new_pricing notebook.ipynb
+housing_data/OpenRent.txt
+housing_data/Output.txt
+housing_data/Transform Notebook.ipynb
 
 # Spyder project settings
 .spyderproject
