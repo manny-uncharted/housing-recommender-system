@@ -93,8 +93,8 @@ else:
                         old_stdout = sys.stdout
                         sys.stdout = captured_output = StringIO()
 
-                        output = st.session_state["chatbot"].conversational_chat(user_input)
-                        # output = st.session_state["chatbot"].conversational_chatagent(user_input)
+                        # output = st.session_state["chatbot"].conversational_chat(user_input)
+                        output = st.session_state["chatbot"].conversational_chatagent(user_input)
 
                         sys.stdout = old_stdout
 

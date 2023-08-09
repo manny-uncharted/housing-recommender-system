@@ -38,7 +38,7 @@ class Utilities:
         #you can define your API key in .env directly
         if os.path.exists(".env") and os.environ.get("OPENAI_API_KEY") is not None:
             user_api_key = os.environ["OPENAI_API_KEY"]
-            st.sidebar.success("API key loaded from .env", icon="🚀")
+            # st.sidebar.success("API key loaded from .env", icon="🚀")
         else:
             if st.session_state.api_key is not None:
                 user_api_key = st.session_state.api_key
