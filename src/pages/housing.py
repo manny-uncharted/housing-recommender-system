@@ -108,7 +108,7 @@ else:
                         with st.expander("Display the agent's thoughts"):
                             st.write(cleaned_thoughts)
 
-                history.generate_messages(response_container)
+                history.dispatch_messages(response_container)
         except Exception as e:
             st.error(f"Error: {str(e)}")
 

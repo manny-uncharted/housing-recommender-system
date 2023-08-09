@@ -36,7 +36,7 @@ class ChatHistory:
     def append(self, mode, message):
         st.session_state[mode].append(message)
 
-    def generate_messages(self, container):
+    def dispatch_messages(self, container):
         if st.session_state["assistant"]:
             with container:
                 for i in range(len(st.session_state["assistant"])):
