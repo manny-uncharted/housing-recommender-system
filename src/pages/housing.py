@@ -88,11 +88,13 @@ else:
                     if is_ready:
                         # Update the chat history and display the chat messages
                         history.append("user", user_input)
+                        print(user_input)
 
                         old_stdout = sys.stdout
                         sys.stdout = captured_output = StringIO()
 
                         output = st.session_state["chatbot"].conversational_chat(user_input)
+                        # output = st.session_state["chatbot"].conversational_chatagent(user_input)
 
                         sys.stdout = old_stdout
 

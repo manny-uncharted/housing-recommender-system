@@ -40,5 +40,6 @@ class Styling:
             submit_button = st.form_submit_button(label="Send")
             
             is_ready = submit_button and user_input
+            print(user_input)
         return is_ready, user_input
     
