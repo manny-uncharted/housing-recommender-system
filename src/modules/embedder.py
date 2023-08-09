@@ -25,6 +25,7 @@ class Embedder:
         """
         Stores document embeddings using Langchain and FAISS
         """
+        embeddings = None
         with tempfile.NamedTemporaryFile(mode="wb", delete=False) as tmp_file:
             tmp_file.write(file)
             tmp_file_path = tmp_file.name
@@ -43,8 +44,13 @@ class Embedder:
         data = loader.load_and_split(text_splitter)
             
             
-        embeddings = OpenAIEmbeddings()
+        # embeddings = OpenAIEmbeddings()
+
         # embeddings = FakeEmbeddings(size=4000)
+        if embeddings == Exception:
+            embeddings = FakeEmbeddings(size=4000)
+        else:
+            embeddings = OpenAIEmbeddings()
 
         vectors = FAISS.from_documents(data, embeddings)
         os.remove(tmp_file_path)
