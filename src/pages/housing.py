@@ -47,7 +47,6 @@ else:
 
         # Configure the sidebar
         sidebar.show_options()
-        sidebar.about()
 
         # Initialize chat history
         history = ChatHistory()
@@ -98,15 +97,6 @@ else:
                         sys.stdout = old_stdout
 
                         history.append("assistant", output)
-
-                        # Clean up the agent's thoughts to remove unwanted characters
-                        thoughts = captured_output.getvalue()
-                        cleaned_thoughts = re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', thoughts)
-                        cleaned_thoughts = re.sub(r'\[1m>', '', cleaned_thoughts)
-
-                        # Display the agent's thoughts
-                        with st.expander("Display the agent's thoughts"):
-                            st.write(cleaned_thoughts)
 
                 history.dispatch_messages(response_container)
         except Exception as e:
