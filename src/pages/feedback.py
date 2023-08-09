@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 # local imports
 from modules.sidebar import Sidebar
-from modules.layout import Layout
+from modules.layout import Styling
 from modules.utils import Utilities
 from modules.utils import send_emails
 

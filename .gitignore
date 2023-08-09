@@ -134,7 +134,7 @@ env.bak/
 venv.bak/
 .env
 setup.sh
-.streamlit/
+# .streamlit/
 added.txt
 
 # dataset
