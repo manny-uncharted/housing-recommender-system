@@ -46,11 +46,15 @@ class Chatbot:
         """
         llm = ChatOpenAI(model_name=self.model_name, temperature=self.temperature)
 
-        chain = FlareChain.from_llm(llm=llm,
-            retriever=self.retriever, max_generation_len=164, min_prob=0.3)
+        chain = FlareChain.from_llm(
+            llm=llm,
+            retriever=self.retriever,
+            max_generation_len=1000, # Adjusted from 4000 to 1000
+            min_prob=0.3,
+        )
 
         chain_input = {"question": query, "chat_history": st.session_state["history"]}
-        result = chain.run(query)
+        result = chain.run(chain_input['question'])
 
         st.session_state["history"].append((query, result["answer"]))
         return result["answer"]
