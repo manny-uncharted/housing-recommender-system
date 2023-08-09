@@ -37,7 +37,6 @@ class Chatbot:
         result = chain(chain_input)
 
         st.session_state["history"].append((query, result["answer"]))
-        #count_tokens_chain(chain, chain_input)
         return result["answer"]
 
 def count_tokens_chain(chain, query):
