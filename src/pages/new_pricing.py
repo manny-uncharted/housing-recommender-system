@@ -55,25 +55,26 @@ with st.form('my_form'):
     features_dict['Furnished'] = col2.radio('Furnished', categories['Furnished'])
 
     st.markdown('### Select the city of Origin of the player')
-    features_dict['City']  = st.multiselect('City',categories['City'],max_selections = 1 )
+    # features_dict['City']  = st.multiselect('City',categories['City'],max_selections = 1 )
+    features_dict['City'] = st.selectbox('City', categories['City'])
     submitted = st.form_submit_button("Predict")
 
-if submitted:
-    features_df = pd.DataFrame(features_dict, index = [0])
-    samp_df = features_df.copy()
-    st.dataframe(features_df)
+    if submitted:
+        features_df = pd.DataFrame(features_dict, index = [0])
+        samp_df = features_df.copy()
+        st.dataframe(features_df)
 
-    for col in categories.keys():
-        for value in categories[col]:
-            if features_df[col].values[0] ==value:
-                features_df[f'{col}_{value}'] = 1
-            else: 
-                features_df[f'{col}_{value}'] = 0
-        features_df.drop(col,axis=1,inplace = True)
+        for col in categories.keys():
+            for value in categories[col]:
+                if features_df[col].values[0] ==value:
+                    features_df[f'{col}_{value}'] = 1
+                else: 
+                    features_df[f'{col}_{value}'] = 0
+            features_df.drop(col,axis=1,inplace = True)
 
-    features = ['Bedrooms', 'latitude', 'longitude', 'Bathrooms', 'Property type_Apartment', 'Property type_House', 'Property type_Room', 'Property type_Studio', 'City_ commercial road whitechapel, ', 'City_ kings cross', 'City_ london', 'City_ london, ', 'City_ studley court , ', 'City_ surrey quays', 'City_-blackfriarsroad', 'City_20 brock street', 'City_5 spa road', 'City_Albertembankment', 'City_Ambassador building', 'City_Angel', 'City_Archway', 'City_Baker street', 'City_Balham', 'City_Barfleur lane, deptford, se8', 'City_Barking', 'City_Barnet', 'City_Batterseapowerstation', 'City_Belvedere', 'City_Birmingham', 'City_Bloomsbury', 'City_Bollinder place', 'City_Borehamwood', 'City_Brentford', 'City_Brentwood', 'City_Brixton', 'City_Brook street', 'City_Canary wharf', 'City_Canarywharf', 'City_Cedar', 'City_Chelsea', 'City_Chigwell', 'City_Chislehurst', 'City_Church road teddington', 'City_Coventgarden', 'City_Crouch end', 'City_Croydon', 'City_Dartford', 'City_E14', 'City_Ealing common', 'City_Ec3r', 'City_Edgware', 'City_Epsom', 'City_Essex', 'City_Fairmont avenue canary wharf', 'City_Feltham', 'City_Golders green', 'City_Grays', 'City_Greater london', 'City_Greenford', 'City_Hammersmith', 'City_Hammersmith and fulham', 'City_Hampstead', 'City_Hanwell', 'City_Harrow', 'City_Hayes', 'City_Hendon', 'City_Highams park ', 'City_Highgate village', 'City_Hornchurch', 'City_Hounslow', 'City_Ilford', 'City_Isleworth', 'City_Iver', 'City_Jesmond', 'City_Kew', 'City_Kingston upon thames', 'City_Landmark pinnacle', 'City_Leyton', 'City_London', 'City_London 0js', 'City_London sw1p', 'City_Marble arch', 'City_Mill hill', 'City_New malden', 'City_Nine elms', 'City_Notting hill', 'City_Nunhead', 'City_Onestgeorgewharf', 'City_Penywern road, earls court, london, sw5', 'City_Perth road, london n4 3hb', 'City_Pinner', 'City_Rainham', 'City_Rainville road', 'City_Richmond', 'City_Rickmansworth', 'City_Rockmount road, plumstead, se18', 'City_Romford', 'City_Ruislip', 'City_Sevenoaks', 'City_South east england', 'City_South kensington', 'City_South norwood', 'City_Southall', "City_St john's wood", 'City_St johns wood', 'City_Stanmore', 'City_Sunbury-on-thames', 'City_Surbiton', 'City_Surrey', 'City_Sutton', 'City_Sw11', 'City_Sw16', 'City_Sw1h', 'City_Sw1p', 'City_Sw3', 'City_Tadworth', 'City_Teddington', 'City_The mount', 'City_Twickenham', 'City_Uxbridge', 'City_Vauxhall', 'City_Victoria', 'City_W1u', 'City_Walthamstow', 'City_Wandsworth', 'City_Wd23', 'City_Wd24', 'City_Welling', 'City_Wembley', 'City_West kensington', 'City_Westminster', 'City_Whitehall', 'City_Wood', 'City_Woolwich', 'Furnished_Yes']
+        features = ['Bedrooms', 'latitude', 'longitude', 'Bathrooms', 'Property type_Apartment', 'Property type_House', 'Property type_Room', 'Property type_Studio', 'City_ commercial road whitechapel, ', 'City_ kings cross', 'City_ london', 'City_ london, ', 'City_ studley court , ', 'City_ surrey quays', 'City_-blackfriarsroad', 'City_20 brock street', 'City_5 spa road', 'City_Albertembankment', 'City_Ambassador building', 'City_Angel', 'City_Archway', 'City_Baker street', 'City_Balham', 'City_Barfleur lane, deptford, se8', 'City_Barking', 'City_Barnet', 'City_Batterseapowerstation', 'City_Belvedere', 'City_Birmingham', 'City_Bloomsbury', 'City_Bollinder place', 'City_Borehamwood', 'City_Brentford', 'City_Brentwood', 'City_Brixton', 'City_Brook street', 'City_Canary wharf', 'City_Canarywharf', 'City_Cedar', 'City_Chelsea', 'City_Chigwell', 'City_Chislehurst', 'City_Church road teddington', 'City_Coventgarden', 'City_Crouch end', 'City_Croydon', 'City_Dartford', 'City_E14', 'City_Ealing common', 'City_Ec3r', 'City_Edgware', 'City_Epsom', 'City_Essex', 'City_Fairmont avenue canary wharf', 'City_Feltham', 'City_Golders green', 'City_Grays', 'City_Greater london', 'City_Greenford', 'City_Hammersmith', 'City_Hammersmith and fulham', 'City_Hampstead', 'City_Hanwell', 'City_Harrow', 'City_Hayes', 'City_Hendon', 'City_Highams park ', 'City_Highgate village', 'City_Hornchurch', 'City_Hounslow', 'City_Ilford', 'City_Isleworth', 'City_Iver', 'City_Jesmond', 'City_Kew', 'City_Kingston upon thames', 'City_Landmark pinnacle', 'City_Leyton', 'City_London', 'City_London 0js', 'City_London sw1p', 'City_Marble arch', 'City_Mill hill', 'City_New malden', 'City_Nine elms', 'City_Notting hill', 'City_Nunhead', 'City_Onestgeorgewharf', 'City_Penywern road, earls court, london, sw5', 'City_Perth road, london n4 3hb', 'City_Pinner', 'City_Rainham', 'City_Rainville road', 'City_Richmond', 'City_Rickmansworth', 'City_Rockmount road, plumstead, se18', 'City_Romford', 'City_Ruislip', 'City_Sevenoaks', 'City_South east england', 'City_South kensington', 'City_South norwood', 'City_Southall', "City_St john's wood", 'City_St johns wood', 'City_Stanmore', 'City_Sunbury-on-thames', 'City_Surbiton', 'City_Surrey', 'City_Sutton', 'City_Sw11', 'City_Sw16', 'City_Sw1h', 'City_Sw1p', 'City_Sw3', 'City_Tadworth', 'City_Teddington', 'City_The mount', 'City_Twickenham', 'City_Uxbridge', 'City_Vauxhall', 'City_Victoria', 'City_W1u', 'City_Walthamstow', 'City_Wandsworth', 'City_Wd23', 'City_Wd24', 'City_Welling', 'City_Wembley', 'City_West kensington', 'City_Westminster', 'City_Whitehall', 'City_Wood', 'City_Woolwich', 'Furnished_Yes']
 
-    features_df = features_df[features]
-    preds = model.predict(features_df)
+        features_df = features_df[features]
+        preds = model.predict(features_df)
 
-    st.write(f'Estimated Rent Value of House is £{preds[0]:,.0f}')
+        st.write(f'Estimated Rent Value of House is £{preds[0]:,.0f}')

@@ -4,7 +4,7 @@ from io import StringIO
 import re
 import sys
 from modules.pricing_hist import ChatHistory
-from modules.layout import Layout
+from modules.layout import Styling
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
 from pathlib import Path
@@ -23,14 +23,14 @@ utils_module = reload_module('modules.utils')
 sidebar_module = reload_module('modules.sidebar')
 
 ChatHistory = history.ChatHistory
-Layout = layout_module.Layout
+Layout = layout_module.Styling
 Utilities = utils_module.Utilities
 Sidebar = sidebar_module.Sidebar
 
 st.set_page_config(layout="wide", page_icon="💬", page_title="Housing Recommender system")
 
 # Instantiate the main components
-layout, sidebar, utils = Layout(), Sidebar(), Utilities()
+layout, sidebar, utils = Styling(), Sidebar(), Utilities()
 
 layout.show_header()
 
@@ -41,7 +41,7 @@ if not user_api_key:
 else:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
-    uploaded_file = utils.handle_upload(["pdf", "txt", "csv"])
+    uploaded_file = utils.handle_upload()
 
     if uploaded_file:
 

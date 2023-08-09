@@ -17,7 +17,8 @@ from modules.embedder import Embedder
 
 BASE_DIR = pathlib.Path().resolve()
 folder_path = BASE_DIR / 'data'
-DATA_PATH = folder_path / 'properties.txt'
+# DATA_PATH = folder_path / 'properties.txt'
+DATA_PATH = folder_path / 'try_properties.txt'
 
 load_dotenv()
 
@@ -53,31 +54,13 @@ class Utilities:
 
     
     @staticmethod
-    def handle_upload(file_types):
+    def handle_upload():
         """
         Handles and display uploaded_file
         :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt"]
         """
         uploaded_file = pathlib.Path(DATA_PATH)
-        
-        # uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
         if uploaded_file is not None:
-            def show_csv_file(uploaded_file):
-                file_container = st.expander("Your CSV file:")
-                with open(uploaded_file, "r") as file:
-                    file.seek(0)
-                    shows = pd.read_csv(file)
-                file_container.write(shows)
-
-            def show_pdf_file(uploaded_file):
-                file_container = st.expander("Your PDF file:")
-                with open(uploaded_file, "rb") as file:
-                    with pdfplumber.open(file) as pdf:
-                        pdf_text = ""
-                        for page in pdf.pages:
-                            pdf_text += page.extract_text() + "\n\n"
-                file_container.write(pdf_text)
-
             def show_txt_file(uploaded_file):
                 file_container = st.expander("Your TXT file:")
                 with open(uploaded_file, "r") as file:
@@ -87,13 +70,7 @@ class Utilities:
 
                        
             file_extension = get_file_extension(uploaded_file)
-
-            # Show the contents of the file based on its extension
-            #if file_extension == ".csv" :
-            #    show_csv_file(uploaded_file)
-            if file_extension== ".pdf" : 
-                show_pdf_file(uploaded_file)
-            elif file_extension== ".txt" : 
+            if file_extension== ".txt" : 
                 show_txt_file(uploaded_file)
 
         else:
@@ -116,7 +93,7 @@ class Utilities:
             # print(file_contents)
             file_name = get_file_extension(uploaded_file)
             # Get the document embeddings for the uploaded file
-            vectors = embeds.getDocEmbeds(file_contents, file_name)
+            vectors = embeds.retrieveDocumentEmbeddings(file_contents, file_name)
             print(vectors)
 
             qa_template = template

@@ -1,6 +1,6 @@
 import streamlit as st
 
-class Layout:
+class Styling:
     
     def show_header(self):
         """

@@ -13,16 +13,16 @@ class Embedder:
 
     def __init__(self):
         self.PATH = "embeddings"
-        self.createEmbeddingsDir()
+        self.mkEmbeddingsDirectory()
 
-    def createEmbeddingsDir(self):
+    def mkEmbeddingsDirectory(self):
         """
         Creates a directory to store the embeddings vectors
         """
         if not os.path.exists(self.PATH):
             os.mkdir(self.PATH)
 
-    def storeDocEmbeds(self, file, original_filename):
+    def storeDocumentEmbeddings(self, file, original_filename):
         """
         Stores document embeddings using Langchain and FAISS
         """
@@ -36,25 +36,10 @@ class Embedder:
             return file_extension
         
         text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size = 2000,
+                chunk_size = 7000,
                 chunk_overlap  = 100,
                 length_function = len,
             )
-        
-        # file_extension = get_file_extension(original_filename)
-        # data = None
-        # if file_extension == ".csv":
-        #     loader = CSVLoader(file_path=tmp_file_path, encoding="utf-8",csv_args={
-        #         'delimiter': ',',})
-        #     data = loader.load()
-
-        # elif file_extension == ".pdf":
-        #     loader = PyPDFLoader(file_path=tmp_file_path)  
-        #     data = loader.load_and_split(text_splitter)
-        
-        # elif file_extension == ".txt":
-        #     loader = TextLoader(file_path=tmp_file_path, encoding="utf-8")
-        #     data = loader.load_and_split(text_splitter)
         loader = TextLoader(file_path=tmp_file_path, encoding="utf-8")
         data = loader.load_and_split(text_splitter)
             
@@ -69,12 +54,12 @@ class Embedder:
         with open(f"{self.PATH}/{original_filename}.pkl", "wb") as f:
             pickle.dump(vectors, f)
 
-    def getDocEmbeds(self, file, original_filename):
+    def retrieveDocumentEmbeddings(self, file, original_filename):
         """
         Retrieves document embeddings
         """
         if not os.path.isfile(f"{self.PATH}/{original_filename}.pkl"):
-            self.storeDocEmbeds(file, original_filename)
+            self.storeDocumentEmbeddings(file, original_filename)
 
         # Load the vectors from the pickle file
         with open(f"{self.PATH}/{original_filename}.pkl", "rb") as f:

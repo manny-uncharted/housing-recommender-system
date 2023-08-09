@@ -13,9 +13,9 @@ port = $PORT\n\
 \n\
 [theme]\n\
 base = \"light\"\n\
-primaryColor = \"#89CFF0\"\n\
-backgroundColor = \"#E0F7FE\"\n\
-secondaryBackgroundColor = \"#FFFCE4\"\n\
-textColor = \"#000000\"\n\
+primaryColor = \"#89CFA6\"\n\
+backgroundColor = \"#E0F8CE\"\n\
+secondaryBackgroundColor = \"#FFACE4\"\n\
+textColor = \"#000900\"\n\
 font = \"sans serif\"\n\
 " > ~/.streamlit/config.toml
