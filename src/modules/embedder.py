@@ -47,12 +47,13 @@ class Embedder:
         # embeddings = OpenAIEmbeddings()
 
         # embeddings = FakeEmbeddings(size=4000)
-        if embeddings == Exception:
-            embeddings = FakeEmbeddings(size=4000)
-        else:
+            
+        try: 
             embeddings = OpenAIEmbeddings()
-
-        vectors = FAISS.from_documents(data, embeddings)
+            vectors = FAISS.from_documents(data, embeddings)
+        except:
+            embeddings = FakeEmbeddings(size=4000)
+            vectors = FAISS.from_documents(data, embeddings)
         os.remove(tmp_file_path)
 
         # Save the vectors to a pickle file
