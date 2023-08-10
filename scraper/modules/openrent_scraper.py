@@ -76,7 +76,12 @@ def openrent_scrape():
         files = df.to_csv('results.csv', sep=',', index=False, encoding='utf-8')
         BASE_DIR = pathlib.Path().resolve()
         DATA_PATH = BASE_DIR / 'results.csv'
-        DATA_PATH_KEY_NAME = f"exports/data/{files}"
-        session = boto3.session.Session()
-        client = session.client('s3', region_name=REGION)
-        client.upload_file(str(DATA_PATH), BUCKET_NAME,  DATA_PATH_KEY_NAME)
+        print("File exists: ", DATA_PATH)
+        DATA_PATH_KEY_NAME = f"exports/data/{DATA_PATH}"
+        print("S3 path: ", DATA_PATH_KEY_NAME)
+        try:
+          session = boto3.session.Session()
+          client = session.client('s3', region_name=REGION)
+          client.upload_file(str(DATA_PATH), BUCKET_NAME,  DATA_PATH_KEY_NAME)
+        except:
+          print("Files did not upload")
