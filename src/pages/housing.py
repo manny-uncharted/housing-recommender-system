@@ -8,7 +8,16 @@ from modules.layout import Styling
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
 from pathlib import Path
+from modules.utils import send_emails, send_emails_recommender
+import smtplib
+from email.mime.text import MIMEText
+from dotenv import load_dotenv
 
+load_dotenv()
+
+sender = os.getenv("MAIL_USERNAME")
+
+password = os.getenv("MAIL_PASSWORD")
 #To be able to update the changes made to modules in localhost (press r)
 def reload_module(module_name):
     import importlib
@@ -95,10 +104,25 @@ else:
                         # output = st.session_state["chatbot"].conversational_chatagent(user_input)
 
                         sys.stdout = old_stdout
+                        # print("Output: ", output)
 
                         history.append("assistant", output)
+                        
 
                 history.dispatch_messages(response_container)
+                with st.form("form1", clear_on_submit=True): 
+                            subject = "My Recommended property"
+                            email = st.text_input("Enter email")
+
+                            submit = st.form_submit_button("Send me my recommendation")
+                            receipients = [email]
+                            if submit:
+                                try:
+                                    send_emails_recommender(email_list=receipients , body_content=history.history[-1][-1], subject=subject, email_from=sender, pswd=password)
+                                except:
+                                    st.write("Error sending email")
+                # print("History: ", history.history[-1])
+                
         except Exception as e:
             st.error(f"Error: {str(e)}")
 

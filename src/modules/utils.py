@@ -152,3 +152,46 @@ def send_emails(email_list, body_content, subject, email_from, pswd):
 
     # Close the port
     TIE_server.quit()
+
+
+def send_emails_recommender(email_list, body_content, subject, email_from, pswd):
+
+    for person in email_list:
+
+        # Make the body of the email
+        body = f"""
+        Dear {person},\n \n 
+        Here is your recommendation for the housing function. \n \n ,
+        {body_content}
+        """
+
+        # make a MIME object to define parts of the email
+        msg = MIMEMultipart()
+        msg['From'] = email_from
+        msg['To'] = person
+        msg['Subject'] = subject
+
+        # Attach the body of the message
+        msg.attach(MIMEText(body, 'plain'))
+        smtp_port = 587                 # Standard secure SMTP port
+        smtp_server = "smtp.gmail.com"  # Google SMTP Server
+
+        # Cast as string
+        text = msg.as_string()
+        # Connect with the server
+        print("Connecting to server...")
+        TIE_server = smtplib.SMTP(smtp_server, smtp_port)
+        TIE_server.starttls()
+        TIE_server.login(email_from, pswd)
+        print("Succesfully connected to server")
+        print()
+
+
+        # Send emails to "person" as list is iterated
+        print(f"Sending email to: {person}...")
+        TIE_server.sendmail(email_from, person, text)
+        print(f"Email sent to: {person}")
+        print()
+
+    # Close the port
+    TIE_server.quit()
