@@ -9,6 +9,8 @@ __pycache__/
 # C extensions
 *.so
 
+keys
+
 src/pages/3_🎬 Sam-Youtube.py
 src/pages/2_📊 Sam-Sheet (beta).py
 2_📊 Sam-Sheet (beta).py
