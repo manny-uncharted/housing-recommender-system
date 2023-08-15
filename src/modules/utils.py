@@ -17,7 +17,7 @@ from modules.embedder import Embedder
 
 BASE_DIR = pathlib.Path().resolve()
 folder_path = BASE_DIR / 'data'
-DATA_PATH = folder_path / 'properties.txt'
+DATA_PATH = folder_path / 'all_properties.txt'
 
 load_dotenv()
 

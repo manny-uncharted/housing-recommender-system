@@ -8,17 +8,20 @@ import pathlib
 import streamlit as st 
 from streamlit_lottie import st_lottie
 from streamlit_lottie import st_lottie_spinner
+from streamlit_chat import message
 st.set_page_config(page_title = 'Rent Price Prediction', page_icon = ':bar_chart:', layout = 'wide')
 import json
 
 BASE_DIR = pathlib.Path().resolve()
-EXPORT_DIR = BASE_DIR / 'data'
+EXPORT_DIR = BASE_DIR / 'housing_data'
 ALL_PROPERTIES_PATH = EXPORT_DIR / 'all_properties.txt'
 CATBOOST_MODEL_PATH = EXPORT_DIR / 'catboost_model'
 CATEGORIES_PATH = EXPORT_DIR / 'categories.json'
 MINI_PROPERTIES_PATH = EXPORT_DIR / 'mini_properties.txt'
-OPENRENT_PATH = EXPORT_DIR / 'openrent.txt'
-OUTPUT_PATH = EXPORT_DIR / 'output.txt'
+df_path = BASE_DIR / 'housing data\Rentola-1.csv'
+df = pd.read_csv(df_path)
+df.columns = [col.replace(':','') for col in df.columns]
+
 f = open(CATEGORIES_PATH)
 categories = json.load(f)
 
@@ -35,33 +38,91 @@ def load_lottieurl(url: str):
 lottie_WAbot = load_lottieurl("https://lottie.host/08db7c19-26bf-400a-89a6-bfd39a0e36af/nsvFXm3afc.json")
 st_lottie(lottie_WAbot, speed=1, height=430, key="initial")
 st.header('House price Prediction')
-
 st.subheader('Predicting rent price of houses ')
-direct_feats = ['Bedrooms', 'latitude','longitude','Bathrooms']
-steps = {'Bedrooms':1, 'latitude':0.0001,'longitude':0.0001, 'Bathrooms': 1}
 
-features_dict = {}
-with st.form('my_form'):
-    st.write("Enter house specifications below")
-    with st.container():
-        for num,col in enumerate( st.columns(2, gap ='large')):
-            ind_feats = list(range(len(direct_feats)))
-            kk = [ind for ind in ind_feats if ind%2 == num ]
-            for ind in kk :
-                features_dict[direct_feats[ind]] = col.number_input(f'**{direct_feats[ind].capitalize()}**',step =steps[direct_feats[ind]])
 
-    col1 , col2 = st.columns(2)
-    features_dict['Property type'] = col1.radio('Property type', categories['Property type'])
-    features_dict['Furnished'] = col2.radio('Furnished', categories['Furnished'])
 
-    st.markdown('### Select the city the house belongs')
-    features_dict['City']  = st.multiselect('City',categories['City'],max_selections = 1 )
-    submitted = st.form_submit_button("Predict")
+if 'responses' not in st.session_state.keys():
+    st.session_state['responses'] = []
+    st.session_state.responses.append("Hi 😉, I am Sammy a price prediction chatbot that helps you estimate the value of your property")
+    st.session_state.responses.append('Please input details of the house of the house you want to predict, how many bedrooms do you want the house to have?')
 
-if submitted:
+    
+if 'queries' not in st.session_state.keys():
+    st.session_state['queries'] = []
+    st.session_state['queries'].append('Hello Sammy👋')
+
+if 'features_dict' not in st.session_state.keys():
+     st.session_state['features_dict']  = {}
+
+
+features = ['Bedrooms','Bathrooms', 'Furnished','Property type','City']
+questions_dict = {'Bathrooms':'Specify the number of bathrooms in the house', 'Furnished':'IS the house furnished','Property type':'Specify Property type of the house','City':'What city is the property located in'}
+accepted_values = {'Bedrooms':'num', 'Bathrooms':'num', 'Furnished' : ['Yes','No'], 'Property type': categories['Property type'], 'City': categories['City']}
+
+
+if 'k' not in st.session_state.keys():
+     st.session_state.k = 0
+
+
+
+
+with st.container():
+    with st.form(key='my_form', clear_on_submit=True):
+        user_input = st.text_input("You:", key='input')
+        submit_button = st.form_submit_button(label='Send')
+
+    if submit_button:
+        st.session_state['queries'].append(user_input)
+        st.write(st.session_state.k)
+        try:
+            answer =  int(user_input) 
+        except:
+            answer = user_input 
+
+        accepted = accepted_values[features[st.session_state.k]]
+
+        if accepted == 'num':
+            if type(answer) == int :
+                
+            
+                st.session_state['features_dict'][features[st.session_state.k]] = answer 
+
+                if st.session_state.k<=4:
+                    st.session_state.k +=1
+
+                    st.session_state['current_question'] = questions_dict[features[st.session_state.k]]
+                    st.session_state.responses.append(st.session_state['current_question']) 
+            
+                
+            else : 
+                st.session_state['current_question'] = 'Error, please follow the specified format \n' + questions_dict[features[st.session_state.k]] 
+                st.session_state.responses.append(st.session_state['current_question']) 
+
+        else :
+        
+            if str(answer).strip().capitalize()  in accepted: 
+                st.session_state['features_dict'][features[st.session_state.k]] = str(answer).strip().capitalize()
+                st.session_state.k +=1
+                if st.session_state.k <=4:
+                    st.session_state['current_question'] = questions_dict[features[st.session_state.k]]
+                    st.session_state.responses.append(st.session_state['current_question']) 
+                   
+            
+                
+            else:
+                st.session_state['current_question'] = 'Error, please follow the specified format \n' + questions_dict[features[st.session_state.k]] 
+                st.session_state.responses.append(st.session_state['current_question']) 
+
+if st.session_state.k == 5:
+    features_dict = st.session_state.features_dict
+    features_dict['latitude'] = df[df['City']==features_dict['City']].latitude.mean()
+    features_dict['longitude'] = df[df['City']==features_dict['City']].longitude.mean()
+    features_dict['Furnished'] = "NaN" if str(features_dict['Furnished']).strip().capitalize() == 'No' else 'Furnished'
+
     features_df = pd.DataFrame(features_dict, index = [0])
     samp_df = features_df.copy()
-    st.dataframe(features_df)
+    #st.dataframe(features_df)
 
     for col in categories.keys():
         for value in categories[col]:
@@ -76,4 +137,16 @@ if submitted:
     features_df = features_df[features]
     preds = model.predict(features_df)
 
-    st.write(f'Estimated Rent Value of House is £{preds[0]:,.0f}')
+    st.session_state["responses"].append(f'Estimated Rent Value of House is £{preds[0]:,.0f}')
+
+inversed_queries = st.session_state['queries'][::-1]
+inversed_responses = st.session_state['responses'][::-1]
+with st.container():
+        for i in range(1,len(inversed_queries)+1):
+            message(inversed_responses[i-1], key=str(i))
+            message(inversed_queries[i-1], is_user=True, key=str(i) + '_user')
+        message(inversed_responses[-1], key=str(-1))
+        
+
+
+
