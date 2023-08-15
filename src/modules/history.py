@@ -14,29 +14,29 @@ class ChatHistory:
     def default_prompt(self, topic):
         return f"Hello ! Ask me anything about {topic} 🤗"
 
-    def initialize_user_history(self):
+    def setup_user_history_records(self):
         st.session_state["user"] = [self.default_greeting()]
 
-    def initialize_assistant_history(self, uploaded_file):
+    def setup_bot_history_records(self, uploaded_file):
         st.session_state["assistant"] = [self.default_prompt(topic="housing")]
 
     def initialize(self, uploaded_file):
         if "assistant" not in st.session_state:
-            self.initialize_assistant_history(uploaded_file)
+            self.setup_bot_history_records(uploaded_file)
         if "user" not in st.session_state:
-            self.initialize_user_history()
+            self.setup_user_history_records()
 
     def reset(self, uploaded_file):
         st.session_state["history"] = []
         
-        self.initialize_user_history()
-        self.initialize_assistant_history(uploaded_file)
+        self.setup_user_history_records()
+        self.setup_bot_history_records(uploaded_file)
         st.session_state["reset_chat"] = False
 
     def append(self, mode, message):
         st.session_state[mode].append(message)
 
-    def generate_messages(self, container):
+    def dispatch_messages(self, container):
         if st.session_state["assistant"]:
             with container:
                 for i in range(len(st.session_state["assistant"])):

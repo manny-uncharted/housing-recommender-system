@@ -2,24 +2,15 @@ import streamlit as st
 
 class Sidebar:
 
-    MODEL_OPTIONS = ["gpt-3.5-turbo", "gpt-4"]
+    MODEL_OPTIONS = ["gpt-3.5-turbo"]
     TEMPERATURE_MIN_VALUE = 0.0
     TEMPERATURE_MAX_VALUE = 1.0
     TEMPERATURE_DEFAULT_VALUE = 0.0
     TEMPERATURE_STEP = 0.01
 
     @staticmethod
-    def about():
-        about = st.sidebar.expander("🧠 About Sam ")
-        sections = [
-            "#### This is a recommender system based AI chatbot with a conversational memory, designed to recommend houses to people. 📄",
-        ]
-        for section in sections:
-            about.write(section)
-
-    @staticmethod
     def reset_chat_button():
-        if st.button("Reset chat"):
+        if st.button("Reset"):
             st.session_state["reset_chat"] = True
         st.session_state.setdefault("reset_chat", False)
 

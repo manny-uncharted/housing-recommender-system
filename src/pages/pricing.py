@@ -4,7 +4,7 @@ from io import StringIO
 import re
 import sys
 from modules.pricing_hist import ChatHistory
-from modules.layout import Layout
+from modules.layout import Styling
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
 from pathlib import Path
@@ -23,14 +23,14 @@ utils_module = reload_module('modules.utils')
 sidebar_module = reload_module('modules.sidebar')
 
 ChatHistory = history.ChatHistory
-Layout = layout_module.Layout
+Layout = layout_module.Styling
 Utilities = utils_module.Utilities
 Sidebar = sidebar_module.Sidebar
 
 st.set_page_config(layout="wide", page_icon="💬", page_title="Housing Recommender system")
 
 # Instantiate the main components
-layout, sidebar, utils = Layout(), Sidebar(), Utilities()
+layout, sidebar, utils = Styling(), Sidebar(), Utilities()
 
 layout.show_header()
 
@@ -41,13 +41,12 @@ if not user_api_key:
 else:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
-    uploaded_file = utils.handle_upload(["pdf", "txt", "csv"])
+    uploaded_file = utils.handle_upload()
 
     if uploaded_file:
 
         # Configure the sidebar
         sidebar.show_options()
-        sidebar.about()
 
         # Initialize chat history
         history1 = ChatHistory()
@@ -97,16 +96,7 @@ else:
 
                         history1.append("assistant1", output)
 
-                        # Clean up the agent's thoughts to remove unwanted characters
-                        thoughts = captured_output.getvalue()
-                        cleaned_thoughts = re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', thoughts)
-                        cleaned_thoughts = re.sub(r'\[1m>', '', cleaned_thoughts)
-
-                        # Display the agent's thoughts
-                        with st.expander("Display the agent's thoughts"):
-                            st.write(cleaned_thoughts)
-
-                history1.generate_messages(response_container)
+                history1.dispatch_messages(response_container)
         except Exception as e:
             st.error(f"Error: {str(e)}")
 

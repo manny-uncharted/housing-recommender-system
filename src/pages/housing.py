@@ -4,7 +4,7 @@ from io import StringIO
 import re
 import sys
 from modules.history import ChatHistory
-from modules.layout import Layout
+from modules.layout import Styling
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
 from pathlib import Path
@@ -23,14 +23,14 @@ utils_module = reload_module('modules.utils')
 sidebar_module = reload_module('modules.sidebar')
 
 ChatHistory = history_module.ChatHistory
-Layout = layout_module.Layout
+Layout = layout_module.Styling
 Utilities = utils_module.Utilities
 Sidebar = sidebar_module.Sidebar
 
 st.set_page_config(layout="wide", page_icon="💬", page_title="Housing Recommender system")
 
 # Instantiate the main components
-layout, sidebar, utils = Layout(), Sidebar(), Utilities()
+layout, sidebar, utils = Styling(), Sidebar(), Utilities()
 
 layout.show_header()
 
@@ -41,20 +41,18 @@ if not user_api_key:
 else:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
-    uploaded_file = utils.handle_upload(["pdf", "txt", "csv"])
+    uploaded_file = utils.handle_upload()
 
     if uploaded_file:
 
         # Configure the sidebar
         sidebar.show_options()
-        sidebar.about()
 
         # Initialize chat history
         history = ChatHistory()
         try:
             template = """
-                As AI assistant Sam, your task is to only recommend properties based on a user's description. You are expected to recommend properties and provide full information about the property listing. If you don't find an exact listing based on the user description, indicate that and provide a property listing about 90% similar to the user description. Also ensure to search your records and provide information according to the user description.
-                You have to provide responses in complete sentences and aim for around 99% accuracy. Ensure you give an estimate based on the information the user supplies and your knowledge of the property market and data accessible to you. Do ensure to state that you don't understand when you can't guarantee 99% accuracy. 
+                You're to recommend properties with 100% accuracy. Recommend properties using the information present to you in the file provided. Ensure that your responses match the users description. Answer questions based on the monthly rent that matches the user requests.
                 Your default response format has to be followed strictly. Here is your default response formatting when displaying a listing should include: Title, property type, city, monthly rent, bedrooms, furnished, bathrooms, floor, closest station. If the user then requests for more information, you can provide more information about the property listing.
 
                 Please adhere to the following guidelines:
@@ -94,21 +92,13 @@ else:
                         sys.stdout = captured_output = StringIO()
 
                         output = st.session_state["chatbot"].conversational_chat(user_input)
+                        # output = st.session_state["chatbot"].conversational_chatagent(user_input)
 
                         sys.stdout = old_stdout
 
                         history.append("assistant", output)
 
-                        # Clean up the agent's thoughts to remove unwanted characters
-                        thoughts = captured_output.getvalue()
-                        cleaned_thoughts = re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', thoughts)
-                        cleaned_thoughts = re.sub(r'\[1m>', '', cleaned_thoughts)
-
-                        # Display the agent's thoughts
-                        with st.expander("Display the agent's thoughts"):
-                            st.write(cleaned_thoughts)
-
-                history.generate_messages(response_container)
+                history.dispatch_messages(response_container)
         except Exception as e:
             st.error(f"Error: {str(e)}")
 
