@@ -61,8 +61,8 @@ else:
         history = ChatHistory()
         try:
             template = """
-                You're to recommend properties with 100% accuracy. Recommend properties using the information present to you in the file provided. Ensure that your responses match the users description. Answer questions based on the monthly rent that matches the user requests.
-                Your default response format has to be followed strictly. Here is your default response formatting when displaying a listing should include: Title, property type, city, monthly rent, bedrooms, furnished, bathrooms, floor, closest station. If the user then requests for more information, you can provide more information about the property listing.
+                You're to recommend properties with 100% accuracy. Recommend properties using the information present to you in the file provided. Ensure that your responses match the users description. Answer questions based on the monthly rent that matches the user requests. For every listing you recommend compute a cosine similarity score that evaluates how similar the listing is to the user's request.
+                Your default response format has to be followed strictly. Here is your default response formatting when displaying a listing should include: Title, property type, city, monthly rent, bedrooms, furnished, bathrooms, floor, closest station, cosine similarity score. If the user then requests for more information, you can provide more information about the property listing.
 
                 Please adhere to the following guidelines:
 
