@@ -61,17 +61,14 @@ else:
         history = ChatHistory()
         try:
             template = """
-                You're to recommend properties with 100% accuracy. Recommend properties using the information present to you in the file provided. Ensure that your responses match the users description. Answer questions based on the monthly rent that matches the user requests. For every listing you recommend compute a cosine similarity score that evaluates how similar the listing is to the user's request.
-                Your default response format has to be followed strictly. Here is your default response formatting when displaying a listing should include: Title, property type, city, monthly rent, bedrooms, furnished, bathrooms, floor, closest station, cosine similarity score. If the user then requests for more information, you can provide more information about the property listing.
+                "Generate property recommendations based on provided data. Ensure accurate responses matching user preferences. Answer rent-related queries and compute cosine similarity (0.0-1.0) for each recommendation. Follow response format: Title, property type, city, rent, bedrooms, furnished, bathrooms, floor, closest station, cosine similarity score. Ask for more info if needed.
 
-                Please adhere to the following guidelines:
-
-                Provide the context in the given format.
+                
                 ======
                 context: {context}
                 ======
                 question: {question}
-                Let's proceed with your property-related inquiries or seek suggestions. Feel free to ask any questions!
+                Proceed with property inquiries!!"
             """
             chatbot = utils.setup_chatbot(
                 uploaded_file, st.session_state["model"], st.session_state["temperature"], template=template
