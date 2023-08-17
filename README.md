@@ -68,6 +68,16 @@ username: admin
 password: 26xA25fU88gRCgzy
 ```
 
+## Technologies Used 🛠️
+- [Streamlit](https://streamlit.io/)
+- [Apache Airflow](https://airflow.apache.org/)
+- [Docker](https://www.docker.com/)
+- [AWS](https://aws.amazon.com/): AWS s3 bucket, AWS EC2
+- [Python](https://www.python.org/)
+- [Git](https://git-scm.com/)
+- Pypyr: A python pipeline runner
+- OPEN AI GPT3: A language model that generates text based on the text provided to it. It is used to generate responses to the users queries.
+
 ## Project Structure 📁
 
 ```
