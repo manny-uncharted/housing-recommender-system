@@ -18,7 +18,7 @@ ALL_PROPERTIES_PATH = EXPORT_DIR / 'all_properties.txt'
 CATBOOST_MODEL_PATH = EXPORT_DIR / 'catboost_model'
 CATEGORIES_PATH = EXPORT_DIR / 'categories.json'
 MINI_PROPERTIES_PATH = EXPORT_DIR / 'mini_properties.txt'
-df_path = BASE_DIR / 'housing data\Rentola-1.csv'
+df_path = EXPORT_DIR / 'Rentola-1.csv'
 df = pd.read_csv(df_path)
 df.columns = [col.replace(':','') for col in df.columns]
 

@@ -54,14 +54,13 @@ with st.form('my_form'):
     features_dict['Property type'] = col1.radio('Property type', categories['Property type'])
     features_dict['Furnished'] = col2.radio('Furnished', categories['Furnished'])
 
-<<<<<<< HEAD
     st.markdown('### Select the city the house belongs')
     features_dict['City']  = st.multiselect('City',categories['City'],max_selections = 1 )
-=======
+
     st.markdown('### Select the city of Origin of the player')
     # features_dict['City']  = st.multiselect('City',categories['City'],max_selections = 1 )
     features_dict['City'] = st.selectbox('City', categories['City'])
->>>>>>> 938c0701d55476c7e45d0a2fb01660da2d535545
+
     submitted = st.form_submit_button("Predict")
 
     if submitted:
