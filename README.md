@@ -1,5 +1,9 @@
 # Sam your housing recommender chatbot 🤖
+A LLM based chatbot that provides recommendations on property listings in the UK.
+This is just a prototype and is not meant to be used in production. As it's a prototype to test a budding concept. The goal is to have a solution that can help real estate companies to provide better customer service to their clients. The chatbot is built using the [Streamlit](https://streamlit.io/) framework.
 
+You can access the demo here:
+[Deployed endpoint](http://ec2-23-22-66-37.compute-1.amazonaws.com:8000/housing)
 
 
 ## Running Locally 💻
